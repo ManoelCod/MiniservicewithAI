@@ -1,17 +1,44 @@
-# MiniservicewithAI
-Construir um microserviço de mensagens onde um cliente envia uma mensagem e recebe uma resposta automática gerada por IA. A solução deve simular ou integrar um fluxo real de atendimento.
+# 💬 MiniservicewithAI
+
+Um microserviço inteligente que responde automaticamente a mensagens de clientes sobre débitos, utilizando IA com TinyLlama, Redis para fila de mensagens e SQLite para histórico.
+
+---
+
+## 🚀 Funcionalidades
+
+- 🔁 Enfileiramento de mensagens com Redis
+- 🤖 Respostas automáticas com IA (TinyLlama via Ollama)
+- 🧾 Consulta de débitos por número de telefone
+- 🗃️ Armazenamento de histórico e erros em SQLite
+- 📊 Documentação interativa com Swagger (Flasgger)
+- 🛠️ Worker assíncrono para processar mensagens em segundo plano
+
+---
+
+## 🧱 Estrutura do Projeto
 
 
-MiniservicewithAI/
-│
-├── app/
-│   ├── api.py              # Endpoints Flask
-│   ├── worker.py           # Worker que processa mensagens
-│   ├── ai_service.py       # Integração com modelo de IA
-│   ├── storage.py          # Armazenamento do histórico
-│   └── config.py           # Configurações (chaves, Redis, etc.)
-│
-├── requirements.txt        # Dependências do projeto
-└── run.py                  # Inicializador da API Flask
+---
+
+## ⚙️ Como executar
+
+### 1. Clone o repositório
+
+```bash
+git clone https://github.com/seu-usuario/MiniservicewithAI.git
+cd MiniservicewithAI
+
+pip install -r requirements.txt
+
+python -c "from app.storage import init_db; init_db()"
+
+4. Inicie o servidor Flask
+python run.py
+
+Inicie o worker 
+python -m app.worker
+
+
+
 
 
