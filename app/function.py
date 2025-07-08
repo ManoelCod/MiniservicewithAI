@@ -6,11 +6,11 @@ def gerar_prompt_para_ia(numero: str) -> str:
         total = sum(valores)
         lista = ", ".join(f"R$ {v:.2f}" for v in valores)
         return (
-            f"Cliente {numero} possui débitos: {lista}. Total: R$ {total:.2f}. "
-            f"Responda de forma educada e objetiva em 1 linha sobre os débitos encontrado acima para o cliente, informado os débidos dele."
+            f"{numero}: débitos {lista} (total R$ {total:.2f}). "
+            f"Resuma em 1 linha com educação."
         )
     else:
         return (
-            f"Cliente {numero} não possui débitos. "
-            f"Escreva não possui débito."
+            f"{numero}: nenhum débito encontrado. "
+            f"Responda em 1 linha com educação."
         )
