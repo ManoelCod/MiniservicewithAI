@@ -2,7 +2,27 @@
 
 Um microserviço inteligente que responde automaticamente a mensagens de clientes sobre débitos, utilizando IA com TinyLlama, Redis para fila de mensagens e SQLite para histórico.
 
----
+## ✅ Requisitos
+
+Antes de executar a aplicação, certifique-se de ter os seguintes componentes instalados:
+
+### 🧰 Dependências locais
+
+- [Python 3.10+](https://www.python.org/)
+- [pip](https://pip.pypa.io/)
+- [Docker](https://www.docker.com/)
+- [Docker Compose](https://docs.docker.com/compose/)
+
+### Serviço em segundo plano
+
+docker run -d --name miniservice_redis -p 6379:6379 redis:7
+
+### Ollama com TinyLlama
+docker run -d --name miniservice_ollama -p 11434:11434 ollama/ollama
+
+Depois de subir o container, entre nele e ative o modelo:
+docker exec -it miniservice_ollama bash
+ollama run tinyllama
 
 ## 🚀 Funcionalidades
 
