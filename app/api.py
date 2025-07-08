@@ -2,7 +2,8 @@ from flask import Flask, request, jsonify
 from flasgger import Swagger
 import redis
 import json
-from app.storage import get_last_messages
+from app.storage import get_last_messages,get_last_errors
+
 
 app = Flask(__name__)
 swagger = Swagger(app)
@@ -59,3 +60,16 @@ def history():
     """
     messages = get_last_messages(10)
     return jsonify(messages), 200
+
+@app.route('/errors', methods=['GET'])
+def errors():
+    """
+    Lista os últimos 10 erros capturados
+    ---
+    tags:
+      - Erros
+    responses:
+      200:
+        description: Lista de erros
+    """
+    return jsonify(get_last_errors(10)), 200
