@@ -1,34 +1,37 @@
 import redis, json, traceback, time
 import json
-from ai_service import generate_response
-from storage import save_message_pair, save_error
+from app.ai_service import generate_response,responder_com_tinyllama
+from app.storage import save_message_pair, save_error
 
 
-r = redis.Redis(host='localhost', port=6379, db=0)
+# Conexão com Redis
+redis_client = redis.Redis(host='localhost', port=6379, db=0, decode_responses=True)
 
-
-print("Worker iniciado.")
+print("👷 Worker iniciado. Aguardando mensagens...")
 
 while True:
-    # tenta por até 5 segundos e retorna None se não houver item
-    item = r.blpop('message_queue', timeout=5)
-    if not item:
-        print("Sem mensagens. Continuo aguardando...")
-        continue
-
-    _, message_json = item
-    data = json.loads(message_json)
-    phone = data['to']
-    user_message = data['message']
-
     try:
-        ai_response = generate_response(user_message)
-        save_message_pair(phone, user_message, ai_response)
-        print(f"[{phone}] IA: {ai_response}")
+        # Espera por uma nova mensagem na fila
+        _, raw_data = redis_client.blpop('message_queue')
+        data = json.loads(raw_data)
+
+        numero = data.get("to")
+        mensagem = data.get("message", "").lower()
+
+        print(f"📩 Mensagem recebida de {numero}: {mensagem}")
+
+        if "débito" in mensagem:
+            resposta = responder_com_tinyllama(numero)
+            print(f"🤖 Resposta gerada: {resposta}")
+
+            # Salva histórico da interação
+            save_message_pair(numero, mensagem, resposta)
+
+        else:
+            print("⚠️ Mensagem fora do escopo. Ignorada.")
 
     except Exception as e:
-        tb = traceback.format_exc()
-        print(f"[{phone}] Erro:\n{tb}")
-        save_error(phone, user_message, str(e))
-        fallback = "Desculpe, não consegui processar sua solicitação."
-        save_message_pair(phone, user_message, fallback)
+        print("❌ Erro no processamento:", e)
+        save_error(str(e))
+
+    time.sleep(0.5)  # Evita loop acelerado em caso de erro
