@@ -7,10 +7,10 @@ def gerar_prompt_para_ia(numero: str) -> str:
         lista = ", ".join(f"R$ {v:.2f}" for v in valores)
         return (
             f"Cliente {numero} possui débitos: {lista}. Total: R$ {total:.2f}. "
-            f"Responda de forma educada e objetiva em 1 linha."
+            f"Responda de forma educada e objetiva em 1 linha sobre os débitos encontrado acima para o cliente, informado os débidos dele."
         )
     else:
         return (
             f"Cliente {numero} não possui débitos. "
-            f"Responda de forma educada e objetiva em 1 linha."
+            f"Escreva não possui débito."
         )

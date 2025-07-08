@@ -8,7 +8,7 @@ import os
 
 # Endpoint local do Ollama
 OLLAMA_URL = "http://localhost:11434/api/generate"
-OLLAMA_MODEL = "tinyllama"
+OLLAMA_MODEL = "phi"
 
 
 def generate_response(user_message: str) -> str:
