@@ -35,7 +35,7 @@ def send_message():
           properties:
             to:
               type: string
-              example: "+5511999999999"
+              example: "+5575998034205"
             message:
               type: string
               example: "Quero saber sobre meus débitos"

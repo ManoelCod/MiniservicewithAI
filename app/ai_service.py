@@ -1,7 +1,9 @@
 # from openai import OpenAI, OpenAIError  # ← Desativado: OpenAI não será usado devido quantidade de cotas da Api.
 import requests
+from requests.exceptions import Timeout, RequestException
 from app.function import gerar_prompt_para_ia
-import os
+from app.dados_simulados import debito_por_numero
+
 
 # Se quiser reativar futuramente:
 # client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -11,34 +13,43 @@ OLLAMA_URL = "http://localhost:11434/api/generate"
 OLLAMA_MODEL = "phi"
 
 
-def generate_response(user_message: str) -> str:
-    try:
-        # Usa apenas TinyLlama via API do Ollama
-        res = requests.post(OLLAMA_URL, json={
-            "model": OLLAMA_MODEL,
-            "prompt": user_message,
-            "stream": False
-        })
-        res.raise_for_status()
-        return res.json()["response"].strip()
-
-    except Exception as e:
-        print("❌ Erro ao usar TinyLlama via Ollama:", e)
-        return "Desculpe, não consegui gerar uma resposta no momento."
-    
 def responder_com_tinyllama(numero: str) -> str:
     prompt = gerar_prompt_para_ia(numero)
 
     try:
-        res = requests.post(OLLAMA_URL, json={
-            "model": OLLAMA_MODEL,
-            "prompt": prompt,
-            "stream": False
-        })
+        res = requests.post(
+            OLLAMA_URL,
+            json={
+                "model": OLLAMA_MODEL,
+                "prompt": prompt,
+                "stream": False
+            },
+            timeout=10  # ⏱️ tempo limite de 10 segundos
+        )
         res.raise_for_status()
-        return res.json()["response"].strip()
 
-    except Exception as e:
-        print("❌ Erro ao usar TinyLlama:", e)
-        return "Desculpe, não consegui gerar uma resposta no momento."
-    
+        resposta = res.json().get("response", "").strip()
+
+        # Se a IA responder vazio ou irrelevante, usamos resposta pronta
+        if not resposta or resposta.lower() in ["artificial intelligence", ""]:
+            print("⚠️ Resposta vazia ou genérica, usando resposta pronta.")
+            return gerar_resposta_pronta(numero)
+
+        return resposta
+
+    except Timeout:
+        print("⏱️ Timeout: modelo demorou demais.")
+        return gerar_resposta_pronta(numero)
+
+    except RequestException as e:
+        print(f"❌ Falha ao consultar modelo IA: {e}")
+        return "Desculpe, houve uma falha na consulta. Tente novamente mais tarde."
+
+def gerar_resposta_pronta(numero: str) -> str:
+    if numero in debito_por_numero:
+        valores = debito_por_numero[numero]
+        total = sum(valores)
+        lista = ", ".join(f"R$ {v:.2f}" for v in valores)
+        return f"Olá! O cliente {numero} possui débitos: {lista}. Total: R$ {total:.2f}."
+    else:
+        return f"Olá! O cliente {numero} não possui débitos registrados no momento."

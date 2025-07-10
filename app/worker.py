@@ -1,6 +1,6 @@
 import redis, json, traceback, time
 import json
-from app.ai_service import generate_response,responder_com_tinyllama
+from app.ai_service import responder_com_tinyllama
 from app.storage import save_message_pair, save_error
 
 
