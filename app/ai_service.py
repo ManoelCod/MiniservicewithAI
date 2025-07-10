@@ -24,7 +24,7 @@ def responder_com_tinyllama(numero: str) -> str:
                 "prompt": prompt,
                 "stream": False
             },
-            timeout=10  # ⏱️ tempo limite de 10 segundos
+            timeout=30  # ⏱️ tempo limite de 30 segundos
         )
         res.raise_for_status()
 
@@ -38,7 +38,6 @@ def responder_com_tinyllama(numero: str) -> str:
         return resposta
 
     except Timeout:
-        print("⏱️ Timeout: modelo demorou demais.")
         return gerar_resposta_pronta(numero)
 
     except RequestException as e:
