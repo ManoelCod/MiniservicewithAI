@@ -9,7 +9,7 @@ from app.dados_simulados import debito_por_numero
 # client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 # Endpoint local do Ollama
-OLLAMA_URL = "http://localhost:11434/api/generate"
+OLLAMA_URL = "http://ollama:11434/api/generate"
 OLLAMA_MODEL = "phi"
 
 
@@ -42,7 +42,7 @@ def responder_com_tinyllama(numero: str) -> str:
 
     except RequestException as e:
         print(f"❌ Falha ao consultar modelo IA: {e}")
-        return "Desculpe, houve uma falha na consulta. Tente novamente mais tarde."
+        return f"Desculpe, houve uma falha na consulta. Tente novamente mais tarde . {e}"
 
 def gerar_resposta_pronta(numero: str) -> str:
     if numero in debito_por_numero:

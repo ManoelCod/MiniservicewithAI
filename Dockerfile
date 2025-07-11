@@ -13,6 +13,7 @@ COPY . .
 # Instala dependências do Python
 RUN pip install --upgrade pip && \
     pip install -r requirements.txt
+    
 
 # Copia config do supervisor
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf

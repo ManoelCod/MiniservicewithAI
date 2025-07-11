@@ -5,7 +5,7 @@ from app.storage import save_message_pair, save_error
 
 
 # Conexão com Redis
-redis_client = redis.Redis(host='localhost', port=6379, db=0, decode_responses=True)
+redis_client = redis.Redis(host='redis-server', port=6379, db=0, decode_responses=True)
 
 print("👷 Worker iniciado. Aguardando mensagens...")
 
@@ -32,6 +32,6 @@ while True:
 
     except Exception as e:
         print("❌ Erro no processamento:", e)
-        save_error(str(e))
+      
 
     time.sleep(0.5)  # Evita loop acelerado em caso de erro

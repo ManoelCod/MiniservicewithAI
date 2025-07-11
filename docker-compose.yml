@@ -1,10 +1,11 @@
 services:
   miniservice:
-    image: miniservice-ai
+    image: miniservice-ai:v2
     container_name: miniservice_app
     ports:
       - "5000:5000"
     volumes:
+    
       - .:/app
     networks:
       - ai-net
