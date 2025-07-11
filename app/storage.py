@@ -31,21 +31,22 @@ def init_db():
     conn.commit()
     conn.close()
 
-def save_message_pair(phone, user_message, ai_response):
+def save_message_pair(phone, user_message, ai_response, whatsapp_link=None):
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
     c.execute('''
-        INSERT INTO messages (phone, user_message, ai_response)
-        VALUES (?, ?, ?)
-    ''', (phone, user_message, ai_response))
+        INSERT INTO messages (phone, user_message, ai_response, whatsapp_link)
+        VALUES (?, ?, ?, ?)
+    ''', (phone, user_message, ai_response, whatsapp_link))
     conn.commit()
     conn.close()
+
 
 def get_last_messages(limit=10):
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
     c.execute('''
-        SELECT phone, user_message, ai_response, timestamp
+        SELECT phone, user_message, ai_response, whatsapp_link, timestamp
         FROM messages
         ORDER BY timestamp DESC
         LIMIT ?
@@ -57,7 +58,8 @@ def get_last_messages(limit=10):
             'phone': row[0],
             'user_message': row[1],
             'ai_response': row[2],
-            'timestamp': row[3]
+            'whatsapp_link': row[3],
+            'timestamp': row[4]
         }
         for row in rows
     ]

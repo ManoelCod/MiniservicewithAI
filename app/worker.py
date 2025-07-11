@@ -1,6 +1,7 @@
 import redis, json, traceback, time
 import json
 from app.ai_service import responder_com_tinyllama
+from app.function import gerar_link_whatsapp
 from app.storage import save_message_pair, save_error
 
 
@@ -25,7 +26,8 @@ while True:
             print(f"🤖 Resposta gerada: {resposta}")
 
             # Salva histórico da interação
-            save_message_pair(numero, mensagem, resposta)
+            link = gerar_link_whatsapp(numero, resposta)
+            save_message_pair(numero, mensagem, resposta,link)
 
         else:
             print("⚠️ Mensagem fora do escopo. Ignorada.")

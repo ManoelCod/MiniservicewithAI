@@ -24,7 +24,7 @@ def responder_com_tinyllama(numero: str) -> str:
                 "prompt": prompt,
                 "stream": False
             },
-            timeout=30  # ⏱️ tempo limite de 30 segundos
+            timeout=60  # ⏱️ tempo limite de 30 segundos
         )
         res.raise_for_status()
 
