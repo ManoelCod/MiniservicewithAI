@@ -19,7 +19,7 @@ redis_client = redis.Redis(host='redis-server', port=6379, db=0, decode_response
 @app.route('/send-message', methods=['POST'])
 def send_message():
     """
-    Envia uma mensagem do cliente para a fila de processamento
+    Alterando para UI para cadastro
     ---
     tags:
       - Mensagens
